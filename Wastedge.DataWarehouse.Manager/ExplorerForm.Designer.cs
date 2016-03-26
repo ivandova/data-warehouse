@@ -95,6 +95,8 @@
             this._treeView.SelectedImageIndex = 0;
             this._treeView.Size = new System.Drawing.Size(284, 236);
             this._treeView.TabIndex = 4;
+            this._treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this._treeView_AfterSelect);
+            this._treeView.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this._treeView_NodeMouseDoubleClick);
             // 
             // _contextMenu
             // 
@@ -141,6 +143,7 @@
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
             this.deleteToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.deleteToolStripMenuItem.Text = "&Delete";
+            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
@@ -162,6 +165,8 @@
             this._imageList.Images.SetKeyName(1, "gearwheel_end.png");
             this._imageList.Images.SetKeyName(2, "gearwheel_stop.png");
             this._imageList.Images.SetKeyName(3, "gearwheel_error.png");
+            this._imageList.Images.SetKeyName(4, "notebook3.png");
+            this._imageList.Images.SetKeyName(5, "tables.png");
             // 
             // ExplorerForm
             // 

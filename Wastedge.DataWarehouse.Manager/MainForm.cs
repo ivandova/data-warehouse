@@ -18,6 +18,8 @@ namespace Wastedge.DataWarehouse.Manager
 
         public ObservableCollection<Instance> Instances => _explorer.Instances;
 
+        public DockPanel DockPanel => _dockPanel;
+
         public MainForm()
         {
             InitializeComponent();
@@ -27,6 +29,11 @@ namespace Wastedge.DataWarehouse.Manager
             _explorer = new ExplorerForm();
 
             _explorer.Show(_dockPanel, DockState.DockLeft);
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

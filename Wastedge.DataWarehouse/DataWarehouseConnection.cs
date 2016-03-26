@@ -12,7 +12,8 @@ namespace Wastedge.DataWarehouse
     public class DataWarehouseConnection
     {
         private readonly IDataWarehouseProvider _provider;
-        private readonly Api _api;
+
+        public Api Api { get; }
 
         public DataWarehouseConnection(DataWarehouseProvider provider, string connectionString, ApiCredentials credentials)
         {
@@ -21,7 +22,7 @@ namespace Wastedge.DataWarehouse
             if (credentials == null)
                 throw new ArgumentNullException(nameof(credentials));
 
-            _api = new Api(credentials);
+            Api = new Api(credentials);
 
             switch (provider)
             {
@@ -47,7 +48,7 @@ namespace Wastedge.DataWarehouse
 
                 foreach (var table in _provider.GetApiTables(connection))
                 {
-                    _provider.MigrateSynchronizedTable(connection, _api.GetEntitySchema(table.Path));
+                    _provider.MigrateSynchronizedTable(connection, Api.GetEntitySchema(table.Path));
                 }
             }
         }
@@ -65,8 +66,58 @@ namespace Wastedge.DataWarehouse
 
                 foreach (var table in _provider.GetApiTables(connection))
                 {
-                    _provider.Synchronize(connection, _api, _api.GetEntitySchema(table.Path), mode);
+                    _provider.Synchronize(connection, Api, Api.GetEntitySchema(table.Path), mode);
                 }
+            }
+        }
+
+        public List<LogLine> GetLog(DateTime? since, int count)
+        {
+            using (var connection = _provider.OpenConnection())
+            {
+                connection.Open();
+
+                return _provider.GetLog(connection, since, count);
+            }
+        }
+
+        public void ClearLog()
+        {
+            using (var connection = _provider.OpenConnection())
+            {
+                connection.Open();
+
+                _provider.ClearLog(connection);
+            }
+        }
+
+        public List<string> GetSynchronized()
+        {
+            using (var connection = _provider.OpenConnection())
+            {
+                connection.Open();
+
+                return _provider.GetApiTables(connection).Select(p => p.Path).ToList();
+            }
+        }
+
+        public void AddSynchronized(string path)
+        {
+            using (var connection = _provider.OpenConnection())
+            {
+                connection.Open();
+
+                _provider.AddApiTable(connection, path);
+            }
+        }
+
+        public void RemoveSynchronized(string path)
+        {
+            using (var connection = _provider.OpenConnection())
+            {
+                connection.Open();
+
+                _provider.RemoveApiTable(connection, path);
             }
         }
     }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Win32;
+using WastedgeApi;
 
 namespace Wastedge.DataWarehouse
 {
@@ -104,6 +105,15 @@ namespace Wastedge.DataWarehouse
             Username != null &&
             Password != null;
 
+        public DataWarehouseConnection OpenConnection()
+        {
+            return new DataWarehouseConnection(
+                Provider.Value,
+                ConnectionString,
+                new ApiCredentials(Url, Tenant, Username, Password)
+            );
+        }
+
         public void Save(RegistryKey hive)
         {
             if (hive == null)
@@ -140,6 +150,14 @@ namespace Wastedge.DataWarehouse
                 UpdateString(key, nameof(Username), Username);
                 UpdateString(key, nameof(Password), Password);
             }
+        }
+
+        public void Delete(RegistryKey hive)
+        {
+            if (hive == null)
+                throw new ArgumentNullException(nameof(hive));
+
+            hive.DeleteSubKey(GetRegistryPath(InstanceId));
         }
 
         private void UpdateInteger(RegistryKey key, string name, int? value)

@@ -35,6 +35,10 @@
     <ApplicationIcon>mainicon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="SourceGrid, Version=4.40.4580.29115, Culture=neutral, PublicKeyToken=df6f5e538749e85d, processorArchitecture=MSIL">
+      <HintPath>..\packages\SourceGrid.4.4.0\lib\net35\SourceGrid.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceProcess" />
@@ -67,6 +71,18 @@
     </Compile>
     <Compile Include="InstanceControlForm.Designer.cs">
       <DependentUpon>InstanceControlForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LogForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LogForm.Designer.cs">
+      <DependentUpon>LogForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SynchronizedTablesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SynchronizedTablesForm.Designer.cs">
+      <DependentUpon>SynchronizedTablesForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Util\ServiceInstaller.cs" />
     <Compile Include="Util\ComboBoxValue.cs" />
@@ -114,6 +130,9 @@
     <EmbeddedResource Include="InstanceControlForm.resx">
       <DependentUpon>InstanceControlForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="LogForm.resx">
+      <DependentUpon>LogForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -122,6 +141,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>NeutralResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="SynchronizedTablesForm.resx">
+      <DependentUpon>SynchronizedTablesForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -129,10 +151,17 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="mainicon.ico" />
+    <None Include="Resources\delete.png" />
+    <None Include="Resources\navigate_left.png" />
+    <None Include="Resources\navigate_right.png" />
     <Content Include="Resources\refresh.png" />
     <None Include="Resources\gearwheel_plus.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\WastedgeApi\WastedgeApi\WastedgeApi.csproj">
+      <Project>{c6bd0c13-2385-48cc-a649-7ab79a14f8f2}</Project>
+      <Name>WastedgeApi</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Wastedge.DataWarehouse.Service\Wastedge.DataWarehouse.Service.csproj">
       <Project>{db098aec-4bc9-4d07-8b00-d4b4ca7a6ff9}</Project>
       <Name>Wastedge.DataWarehouse.Service</Name>

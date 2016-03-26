@@ -505,6 +505,87 @@ namespace Wastedge.DataWarehouse.Provider.MSSql
             }
         }
 
+        public List<LogLine> GetLog(DbConnection connection, DateTime? since, int count)
+        {
+            if (connection == null)
+                throw new ArgumentNullException(nameof(connection));
+
+            var result = new List<LogLine>();
+
+            string sql = $"select top {count} start, [end], duration, path, error, record_count from dwh_log";
+
+            if (since.HasValue)
+                sql += " where start > @start";
+
+            sql += " order by start";
+
+            using (var command = connection.CreateCommand())
+            {
+                command.CommandText = sql;
+                if (since.HasValue)
+                    AddParameter(command, "start", since.Value);
+
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        result.Add(new LogLine(
+                            reader.GetDateTime(0),
+                            reader.GetDateTime(1),
+                            reader.GetInt32(2),
+                            reader.GetString(3),
+                            reader.IsDBNull(4) ? null : reader.GetString(4),
+                            reader.IsDBNull(5) ? (int?)null : reader.GetInt32(5)
+                        ));
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public void ClearLog(DbConnection connection)
+        {
+            if (connection == null)
+                throw new ArgumentNullException(nameof(connection));
+
+            using (var command = connection.CreateCommand())
+            {
+                command.CommandText = "delete from dwh_log";
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public void AddApiTable(DbConnection connection, string path)
+        {
+            if (connection == null)
+                throw new ArgumentNullException(nameof(connection));
+            if (path == null)
+                throw new ArgumentNullException(nameof(path));
+
+            using (var command = connection.CreateCommand())
+            {
+                command.CommandText = "insert into dwh_synchronize (path) values (@path)";
+                AddParameter(command, "path", path);
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public void RemoveApiTable(DbConnection connection, string path)
+        {
+            if (connection == null)
+                throw new ArgumentNullException(nameof(connection));
+            if (path == null)
+                throw new ArgumentNullException(nameof(path));
+
+            using (var command = connection.CreateCommand())
+            {
+                command.CommandText = "delete from dwh_synchronize where path = @path";
+                AddParameter(command, "path", path);
+                command.ExecuteNonQuery();
+            }
+        }
+
         private class Logger
         {
             private readonly DbConnection _connection;

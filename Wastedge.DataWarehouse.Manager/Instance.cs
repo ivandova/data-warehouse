@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-using Microsoft.Win32;
-using Wastedge.DataWarehouse.Manager.Util;
 using Wastedge.DataWarehouse.Service;
 
 namespace Wastedge.DataWarehouse.Manager
@@ -73,8 +69,19 @@ namespace Wastedge.DataWarehouse.Manager
                 Configuration.InstanceName,
                 $"Wastedge Data Warehouse - Instance {Configuration.InstanceId}",
                 typeof(Daemon).Assembly.Location,
-                ServiceBootFlag.AutoStart
+                Util.ServiceInstaller.ServiceBootFlag.AutoStart
             );
+
+            RefreshStatus();
+        }
+
+        public void Remove()
+        {
+            Util.ServiceInstaller.Uninstall(Configuration.InstanceName);
+
+            Configuration.Delete(Program.BaseKey);
+
+            RefreshStatus();
         }
 
         public void Start()

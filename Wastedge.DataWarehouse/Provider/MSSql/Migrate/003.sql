@@ -1,10 +1,4 @@
-﻿create table dwh_log (
-	start datetime2(3) not null,
-	[end] datetime2(3) not null,
-	duration int not null,
-	path nvarchar(200) not null,
-	error nvarchar(max),
-	record_count int,
-	index idx_start (start),
-	index idx_path (path)
+﻿create table dwh_synchronize (
+	path nvarchar(200) not null primary key,
+	last_update datetime2(3)
 )

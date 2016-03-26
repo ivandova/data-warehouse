@@ -19,5 +19,9 @@ namespace Wastedge.DataWarehouse
         void SetApiTableLastUpdate(DbConnection connection, string path, DateTime? lastUpdate);
         void MigrateSynchronizedTable(DbConnection connection, EntitySchema schema);
         void Synchronize(DbConnection connection, Api api, EntitySchema schema, SynchronizeMode mode);
+        List<LogLine> GetLog(DbConnection connection, DateTime? since, int count);
+        void ClearLog(DbConnection connection);
+        void AddApiTable(DbConnection connection, string path);
+        void RemoveApiTable(DbConnection connection, string path);
     }
 }

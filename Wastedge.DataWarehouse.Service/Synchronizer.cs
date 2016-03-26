@@ -101,11 +101,7 @@ namespace Wastedge.DataWarehouse.Service
 
         private void Connect()
         {
-            _connection = new DataWarehouseConnection(
-                _configuration.Provider.Value,
-                _configuration.ConnectionString,
-                new ApiCredentials(_configuration.Url, _configuration.Tenant, _configuration.Username, _configuration.Password)
-            );
+            _connection = _configuration.OpenConnection();
 
             Log.Info("Migrating database support tables");
 
