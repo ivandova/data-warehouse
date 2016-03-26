@@ -52,12 +52,35 @@ namespace Wastedge.DataWarehouse.Manager
 
             _progressBar.Value = 1;
 
-            _timer.Start();
+            try
+            {
+                if (_control == InstanceControlAction.Start)
+                    _instance.Start();
+                else
+                    _instance.Stop();
 
-            if (_control == InstanceControlAction.Start)
-                _instance.Start();
-            else
-                _instance.Stop();
+                _timer.Start();
+            }
+            catch (Exception ex)
+            {
+                var sb = new StringBuilder()
+                    .AppendLine("Could not complete the operation:")
+                    .AppendLine()
+                    .AppendLine(ex.Message);
+
+                if (ex.InnerException != null)
+                    sb.AppendLine().AppendLine(ex.InnerException.Message);
+
+                MessageBox.Show(
+                    this,
+                    sb.ToString(),
+                    Text,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+
+                Dispose();
+            }
         }
 
         private void _timer_Tick(object sender, EventArgs e)
