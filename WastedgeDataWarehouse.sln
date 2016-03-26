@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WastedgeApi", "..\WastedgeA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wastedge.DataWarehouse.Cli", "Wastedge.DataWarehouse.Cli\Wastedge.DataWarehouse.Cli.csproj", "{54E9F2E7-A628-492A-B763-CDDCBA6AE931}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wastedge.DataWarehouse.Service", "Wastedge.DataWarehouse.Service\Wastedge.DataWarehouse.Service.csproj", "{DB098AEC-4BC9-4D07-8B00-D4B4CA7A6FF9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wastedge.DataWarehouse.Service.Cli", "Wastedge.DataWarehouse.Service.Cli\Wastedge.DataWarehouse.Service.Cli.csproj", "{CA33F419-199D-4E04-98A3-939D95AEA0E5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{54E9F2E7-A628-492A-B763-CDDCBA6AE931}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{54E9F2E7-A628-492A-B763-CDDCBA6AE931}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{54E9F2E7-A628-492A-B763-CDDCBA6AE931}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB098AEC-4BC9-4D07-8B00-D4B4CA7A6FF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB098AEC-4BC9-4D07-8B00-D4B4CA7A6FF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB098AEC-4BC9-4D07-8B00-D4B4CA7A6FF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB098AEC-4BC9-4D07-8B00-D4B4CA7A6FF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA33F419-199D-4E04-98A3-939D95AEA0E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA33F419-199D-4E04-98A3-939D95AEA0E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA33F419-199D-4E04-98A3-939D95AEA0E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA33F419-199D-4E04-98A3-939D95AEA0E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

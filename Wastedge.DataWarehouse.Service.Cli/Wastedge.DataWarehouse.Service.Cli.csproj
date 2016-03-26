@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0456960C-11DF-42A2-9D66-ABBD33CD77C2}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{CA33F419-199D-4E04-98A3-939D95AEA0E5}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Wastedge.DataWarehouse</RootNamespace>
-    <AssemblyName>Wastedge.DataWarehouse</AssemblyName>
+    <RootNamespace>Wastedge.DataWarehouse.Service.Cli</RootNamespace>
+    <AssemblyName>Wastedge.DataWarehouse.Service.Cli</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -32,6 +34,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -40,32 +43,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApiTable.cs" />
-    <Compile Include="ApiTableCollection.cs" />
-    <Compile Include="DataWarehouseConfiguration.cs" />
-    <Compile Include="DataWarehouseConnection.cs" />
-    <Compile Include="DataWarehouseException.cs" />
-    <Compile Include="DataWarehouseProvider.cs" />
-    <Compile Include="DbDataReaderExtensions.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="IDataWarehouseProvider.cs" />
-    <Compile Include="Provider\MSSql\MSSqlProvider.cs" />
-    <Compile Include="Provider\MSSql\SqlWriter.cs" />
-    <Compile Include="SynchronizeMode.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\WastedgeApi\WastedgeApi\WastedgeApi.csproj">
-      <Project>{c6bd0c13-2385-48cc-a649-7ab79a14f8f2}</Project>
-      <Name>WastedgeApi</Name>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Wastedge.DataWarehouse.Service\Wastedge.DataWarehouse.Service.csproj">
+      <Project>{db098aec-4bc9-4d07-8b00-d4b4ca7a6ff9}</Project>
+      <Name>Wastedge.DataWarehouse.Service</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Provider\MSSql\Migrate\003.sql" />
-    <EmbeddedResource Include="Provider\MSSql\Migrate\002.sql" />
-    <EmbeddedResource Include="Provider\MSSql\Migrate\001.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Provider\MSSql\Migrate\004.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
