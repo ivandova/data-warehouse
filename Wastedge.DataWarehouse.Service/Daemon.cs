@@ -33,13 +33,9 @@ namespace Wastedge.DataWarehouse.Service
 
         private int GetInstanceId(string serviceName)
         {
-            int pos = serviceName.LastIndexOf('.');
-            if (pos != -1)
-            {
-                int instanceId;
-                if (int.TryParse(serviceName.Substring(pos + 1), out instanceId))
-                    return instanceId;
-            }
+            int instanceId;
+            if (DataWarehouseConfiguration.TryParseServiceName(serviceName, out instanceId))
+                return instanceId;
 
             throw new InvalidOperationException($"Cannot get instance ID from service name {serviceName}");
         }

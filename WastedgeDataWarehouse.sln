@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wastedge.DataWarehouse.Serv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wastedge.DataWarehouse.Service.Cli", "Wastedge.DataWarehouse.Service.Cli\Wastedge.DataWarehouse.Service.Cli.csproj", "{CA33F419-199D-4E04-98A3-939D95AEA0E5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wastedge.DataWarehouse.Manager", "Wastedge.DataWarehouse.Manager\Wastedge.DataWarehouse.Manager.csproj", "{6ADF6213-9F36-4BF8-AE0A-30EFD2358C8F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{CA33F419-199D-4E04-98A3-939D95AEA0E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA33F419-199D-4E04-98A3-939D95AEA0E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA33F419-199D-4E04-98A3-939D95AEA0E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6ADF6213-9F36-4BF8-AE0A-30EFD2358C8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6ADF6213-9F36-4BF8-AE0A-30EFD2358C8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6ADF6213-9F36-4BF8-AE0A-30EFD2358C8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6ADF6213-9F36-4BF8-AE0A-30EFD2358C8F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

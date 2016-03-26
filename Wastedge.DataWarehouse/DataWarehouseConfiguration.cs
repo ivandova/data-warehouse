@@ -9,7 +9,9 @@ namespace Wastedge.DataWarehouse
 {
     public class DataWarehouseConfiguration
     {
-        public int InstanceId { get; }
+        private const string BaseKey = "Software\\Wastedge Data Warehouse";
+
+        public int InstanceId { get; private set; }
         public int? TrackedTableInterval { get; set; }
         public int? UntrackedTableInterval { get; set; }
         public DataWarehouseProvider? Provider { get; set; }
@@ -18,6 +20,30 @@ namespace Wastedge.DataWarehouse
         public string Tenant { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
+        public string InstanceName => $"WEDW.{InstanceId}";
+
+        public static List<DataWarehouseConfiguration> LoadAll(RegistryKey hive)
+        {
+            if (hive == null)
+                throw new ArgumentNullException(nameof(hive));
+
+            var result = new List<DataWarehouseConfiguration>();
+
+            using (var key = hive.OpenSubKey(BaseKey))
+            {
+                if (key == null)
+                    return result;
+
+                foreach (string instanceName in key.GetSubKeyNames())
+                {
+                    int instanceId;
+                    if (TryParseServiceName(instanceName, out instanceId))
+                        result.Add(Load(hive, instanceId));
+                }
+            }
+
+            return result;
+        }
 
         public static DataWarehouseConfiguration Load(RegistryKey hive, int instanceId)
         {
@@ -52,6 +78,11 @@ namespace Wastedge.DataWarehouse
             return configuration;
         }
 
+        public DataWarehouseConfiguration()
+            : this(0)
+        {
+        }
+
         private DataWarehouseConfiguration(int instanceId)
         {
             InstanceId = instanceId;
@@ -77,6 +108,26 @@ namespace Wastedge.DataWarehouse
         {
             if (hive == null)
                 throw new ArgumentNullException(nameof(hive));
+
+            if (InstanceId == 0)
+            {
+                int largest = 0;
+
+                using (var key = hive.OpenSubKey(BaseKey))
+                {
+                    if (key != null)
+                    {
+                        foreach (string serviceName in key.GetSubKeyNames())
+                        {
+                            int instanceId;
+                            if (TryParseServiceName(serviceName, out instanceId))
+                                largest = Math.Max(largest, instanceId);
+                        }
+                    }
+                }
+
+                InstanceId = largest + 1;
+            }
 
             using (var key = hive.CreateSubKey(GetRegistryPath(InstanceId)))
             {
@@ -109,7 +160,20 @@ namespace Wastedge.DataWarehouse
 
         private static string GetRegistryPath(int instanceId)
         {
-            return $"Software\\Wastedge Data Warehouse\\WEDW.{instanceId}";
+            return BaseKey + $"\\WEDW.{instanceId}";
+        }
+
+        public static bool TryParseServiceName(string serviceName, out int instanceId)
+        {
+            if (serviceName == null)
+                throw new ArgumentNullException(nameof(serviceName));
+
+            instanceId = 0;
+
+            if (!serviceName.StartsWith("WEDW."))
+                return false;
+
+            return int.TryParse(serviceName.Substring(5), out instanceId);
         }
     }
 }

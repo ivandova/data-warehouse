@@ -46,6 +46,7 @@
     <Compile Include="DataWarehouseConnection.cs" />
     <Compile Include="DataWarehouseException.cs" />
     <Compile Include="DataWarehouseProvider.cs" />
+    <Compile Include="EnumExtensions.cs" />
     <Compile Include="DbDataReaderExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IDataWarehouseProvider.cs" />
