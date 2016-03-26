@@ -12,13 +12,15 @@ namespace Wastedge.DataWarehouse.Service
     internal class EventLogAppender : AppenderSkeleton
     {
         private readonly EventLog _eventLog;
+        private readonly int _instanceId;
 
-        public EventLogAppender(EventLog eventLog)
+        public EventLogAppender(EventLog eventLog, int instanceId)
         {
             if (eventLog == null)
                 throw new ArgumentNullException(nameof(eventLog));
 
             _eventLog = eventLog;
+            _instanceId = instanceId;
         }
 
         protected override void Append(LoggingEvent loggingEvent)
@@ -60,7 +62,7 @@ namespace Wastedge.DataWarehouse.Service
                 message = sb.ToString();
             }
 
-            _eventLog.WriteEntry(message, eventType);
+            _eventLog.WriteEntry(message, eventType, _instanceId);
         }
     }
 }

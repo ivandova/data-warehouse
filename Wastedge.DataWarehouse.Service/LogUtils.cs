@@ -14,7 +14,7 @@ namespace Wastedge.DataWarehouse.Service
 {
     public static class LogUtils
     {
-        public static void SetupEventLogging(string source, string log)
+        public static void SetupEventLogging(string source, string log, int instanceId)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -30,7 +30,7 @@ namespace Wastedge.DataWarehouse.Service
             if (!EventLog.SourceExists(eventLog.Source))
                 EventLog.CreateEventSource(eventLog.Source, eventLog.Log);
 
-            SetAppender(new EventLogAppender(eventLog), Level.Info);
+            SetAppender(new EventLogAppender(eventLog, instanceId), Level.Info);
         }
 
         public static void SetupConsoleLogging()

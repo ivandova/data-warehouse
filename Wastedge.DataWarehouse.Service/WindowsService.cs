@@ -14,13 +14,7 @@ namespace Wastedge.DataWarehouse.Service
 {
     public partial class WindowsService : ServiceBase
     {
-        private static readonly ILog Log;
-
-        static WindowsService()
-        {
-            LogUtils.SetupEventLogging(EventLogSource, EventLogName);
-            Log = LogManager.GetLogger(typeof(WindowsService));
-        }
+        private static ILog Log;
 
         public const string EventLogSource = "WEDW";
         public const string EventLogName = "Wastedge Data Warehouse";
@@ -38,6 +32,12 @@ namespace Wastedge.DataWarehouse.Service
             try
             {
                 _serviceName = GetServiceName();
+
+                int instanceId;
+                DataWarehouseConfiguration.TryParseServiceName(_serviceName, out instanceId);
+
+                LogUtils.SetupEventLogging(EventLogSource, EventLogName, instanceId);
+                Log = LogManager.GetLogger(typeof(WindowsService));
 
                 Log.Info($"Starting Wastedge Data Warehouse {_serviceName}");
 
