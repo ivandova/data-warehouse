@@ -60,12 +60,6 @@
     <Compile Include="SynchronizeMode.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\WastedgeApi\WastedgeApi\WastedgeApi.csproj">
-      <Project>{c6bd0c13-2385-48cc-a649-7ab79a14f8f2}</Project>
-      <Name>WastedgeApi</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Provider\MSSql\Migrate\002.sql" />
     <EmbeddedResource Include="Provider\MSSql\Migrate\001.sql" />
   </ItemGroup>
@@ -74,6 +68,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WastedgeApi\WastedgeApi\WastedgeApi.csproj">
+      <Project>{c6bd0c13-2385-48cc-a649-7ab79a14f8f2}</Project>
+      <Name>WastedgeApi</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

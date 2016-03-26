@@ -167,10 +167,6 @@
     <None Include="Resources\gearwheel_plus.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\WastedgeApi\WastedgeApi\WastedgeApi.csproj">
-      <Project>{c6bd0c13-2385-48cc-a649-7ab79a14f8f2}</Project>
-      <Name>WastedgeApi</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Wastedge.DataWarehouse.Service\Wastedge.DataWarehouse.Service.csproj">
       <Project>{db098aec-4bc9-4d07-8b00-d4b4ca7a6ff9}</Project>
       <Name>Wastedge.DataWarehouse.Service</Name>
@@ -178,6 +174,10 @@
     <ProjectReference Include="..\Wastedge.DataWarehouse\Wastedge.DataWarehouse.csproj">
       <Project>{0456960c-11df-42a2-9d66-abbd33cd77c2}</Project>
       <Name>Wastedge.DataWarehouse</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WastedgeApi\WastedgeApi\WastedgeApi.csproj">
+      <Project>{c6bd0c13-2385-48cc-a649-7ab79a14f8f2}</Project>
+      <Name>WastedgeApi</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

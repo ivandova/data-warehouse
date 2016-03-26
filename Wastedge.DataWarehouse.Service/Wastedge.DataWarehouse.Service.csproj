@@ -66,13 +66,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\WastedgeApi\WastedgeApi\WastedgeApi.csproj">
-      <Project>{C6BD0C13-2385-48CC-A649-7AB79A14F8F2}</Project>
-      <Name>WastedgeApi</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Wastedge.DataWarehouse\Wastedge.DataWarehouse.csproj">
       <Project>{0456960C-11DF-42A2-9D66-ABBD33CD77C2}</Project>
       <Name>Wastedge.DataWarehouse</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WastedgeApi\WastedgeApi\WastedgeApi.csproj">
+      <Project>{c6bd0c13-2385-48cc-a649-7ab79a14f8f2}</Project>
+      <Name>WastedgeApi</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
