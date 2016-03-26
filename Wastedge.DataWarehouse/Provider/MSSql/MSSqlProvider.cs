@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -65,11 +66,11 @@ namespace Wastedge.DataWarehouse.Provider.MSSql
             }
         }
 
-        private void AddParameter(DbCommand command, string name, object value)
+        private static void AddParameter(DbCommand command, string name, object value)
         {
             var parameter = command.CreateParameter();
             parameter.ParameterName = name;
-            parameter.Value = value;
+            parameter.Value = value ?? DBNull.Value;
             if (parameter.Value is DateTime)
                 ((SqlParameter)parameter).SqlDbType = SqlDbType.DateTime2;
             command.Parameters.Add(parameter);
@@ -401,86 +402,188 @@ namespace Wastedge.DataWarehouse.Provider.MSSql
 
             sql.Write(")");
 
-            var resultSet = api.Query(schema, filters);
+            var logger = new Logger(connection, schema);
 
-            while (resultSet.Next())
+            logger.Start();
+
+            try
             {
-                using (var transaction = connection.BeginTransaction())
+                var resultSet = api.Query(schema, filters);
+
+                while (resultSet.Next())
                 {
-                    DateTime? lastUpdate = null;
+                    logger.HaveResults(resultSet.RowCount);
 
-                    using (var command = connection.CreateCommand())
+                    using (var transaction = connection.BeginTransaction())
                     {
-                        command.Transaction = transaction;
-                        command.CommandText = sql.ToString();
+                        DateTime? lastUpdate = null;
 
-                        var parameters = new Dictionary<string, DbParameter>();
-
-                        var parameter = command.CreateParameter();
-                        parameters.Add("$id", parameter);
-                        parameter.ParameterName = "id";
-                        command.Parameters.Add(parameter);
-
-                        index = 0;
-
-                        foreach (var field in schema.Members.OfType<EntityTypedField>())
-                        {
-                            if (field is EntityIdField)
-                                continue;
-
-                            parameter = command.CreateParameter();
-                            parameters.Add(field.Name, parameter);
-                            parameter.ParameterName = $"p{index++}";
-                            command.Parameters.Add(parameter);
-                        }
-
-                        do
-                        {
-                            for (int i = 0; i < resultSet.FieldCount; i++)
-                            {
-                                var fieldName = resultSet.GetFieldName(i);
-
-                                if (!parameters.TryGetValue(fieldName, out parameter))
-                                    throw new InvalidOperationException();
-
-                                parameter.Value = resultSet[i] ?? DBNull.Value;
-                                if (parameter.Value is DateTime)
-                                    ((SqlParameter)parameter).SqlDbType = SqlDbType.DateTime2;
-
-                                if (
-                                    String.Equals(fieldName, "update_timestamp", StringComparison.OrdinalIgnoreCase) &&
-                                    !resultSet.IsNull(i)
-                                ) {
-                                    var thisLastUpdate = resultSet.GetDateTime(i);
-                                    if (lastUpdate == null || thisLastUpdate > lastUpdate.Value)
-                                        lastUpdate = thisLastUpdate;
-                                }
-                            }
-
-                            command.ExecuteNonQuery();
-                        }
-                        while (resultSet.Next());
-                    }
-
-                    if (lastUpdate.HasValue)
-                    {
                         using (var command = connection.CreateCommand())
                         {
                             command.Transaction = transaction;
-                            command.CommandText = "update dwh_synchronize set last_update = @last_update where path = @path";
-                            AddParameter(command, "last_update", lastUpdate.Value);
-                            AddParameter(command, "path", schema.Name);
-                            command.ExecuteNonQuery();
+                            command.CommandText = sql.ToString();
+
+                            var parameters = new Dictionary<string, DbParameter>();
+
+                            var parameter = command.CreateParameter();
+                            parameters.Add("$id", parameter);
+                            parameter.ParameterName = "id";
+                            command.Parameters.Add(parameter);
+
+                            index = 0;
+
+                            foreach (var field in schema.Members.OfType<EntityTypedField>())
+                            {
+                                if (field is EntityIdField)
+                                    continue;
+
+                                parameter = command.CreateParameter();
+                                parameters.Add(field.Name, parameter);
+                                parameter.ParameterName = $"p{index++}";
+                                command.Parameters.Add(parameter);
+                            }
+
+                            do
+                            {
+                                for (int i = 0; i < resultSet.FieldCount; i++)
+                                {
+                                    var fieldName = resultSet.GetFieldName(i);
+
+                                    if (!parameters.TryGetValue(fieldName, out parameter))
+                                        throw new InvalidOperationException();
+
+                                    parameter.Value = resultSet[i] ?? DBNull.Value;
+                                    if (parameter.Value is DateTime)
+                                        ((SqlParameter)parameter).SqlDbType = SqlDbType.DateTime2;
+
+                                    if (
+                                        String.Equals(fieldName, "update_timestamp", StringComparison.OrdinalIgnoreCase) &&
+                                        !resultSet.IsNull(i)
+                                        )
+                                    {
+                                        var thisLastUpdate = resultSet.GetDateTime(i);
+                                        if (lastUpdate == null || thisLastUpdate > lastUpdate.Value)
+                                            lastUpdate = thisLastUpdate;
+                                    }
+                                }
+
+                                command.ExecuteNonQuery();
+                            }
+                            while (resultSet.Next());
                         }
+
+                        if (lastUpdate.HasValue)
+                        {
+                            using (var command = connection.CreateCommand())
+                            {
+                                command.Transaction = transaction;
+                                command.CommandText = "update dwh_synchronize set last_update = @last_update where path = @path";
+                                AddParameter(command, "last_update", lastUpdate.Value);
+                                AddParameter(command, "path", schema.Name);
+                                command.ExecuteNonQuery();
+                            }
+                        }
+
+                        transaction.Commit();
                     }
 
-                    transaction.Commit();
+                    if (!resultSet.HasMore)
+                        break;
+
+                    logger.Start();
+
+                    resultSet = resultSet.GetNext();
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.SetException(ex);
+            }
+            finally
+            {
+                logger.End();
+            }
+        }
+
+        private class Logger
+        {
+            private readonly DbConnection _connection;
+            private readonly EntitySchema _schema;
+            private Stopwatch _stopwatch;
+            private DateTime _start;
+            private Exception _exception;
+            private int? _records;
+
+            public Logger(DbConnection connection, EntitySchema schema)
+            {
+                _connection = connection;
+                _schema = schema;
+            }
+
+            public void Start()
+            {
+                _start = DateTime.Now;
+                _stopwatch = Stopwatch.StartNew();
+                _exception = null;
+                _records = null;
+            }
+
+            public void SetException(Exception exception)
+            {
+                _exception = exception;
+            }
+
+            public void End()
+            {
+                var end = DateTime.Now;
+
+                int elapsed = (int)_stopwatch.ElapsedMilliseconds;
+
+                int? records = _records.HasValue ? _records : _exception == null ? (int?)0 : null;
+
+                using (var command = _connection.CreateCommand())
+                {
+                    command.CommandText = "insert into dwh_log (start, [end], duration, path, error, record_count) values (@start, @end, @duration, @path, @error, @records)";
+                    AddParameter(command, "start", _start);
+                    AddParameter(command, "end", end);
+                    AddParameter(command, "duration", elapsed);
+                    AddParameter(command, "path", _schema.Name);
+                    AddParameter(command, "error", GetError());
+                    AddParameter(command, "records", records);
+                    command.ExecuteNonQuery();
+                }
+            }
+
+            private string GetError()
+            {
+                if (_exception == null)
+                    return null;
+
+                var sb = new StringBuilder();
+
+                var exception = _exception;
+
+                while (true)
+                {
+                    sb.Append(exception.Message).Append(" (").Append(exception.GetType().FullName).AppendLine(")");
+
+                    if (exception.StackTrace != null)
+                        sb.AppendLine().AppendLine(exception.StackTrace.TrimEnd());
+
+                    if (exception.InnerException == null)
+                        break;
+
+                    exception = exception.InnerException;
+
+                    sb.AppendLine("== Caused by ==").AppendLine();
                 }
 
-                if (!resultSet.HasMore)
-                    break;
+                return sb.ToString();
+            }
 
-                resultSet = resultSet.GetNext();
+            public void HaveResults(int records)
+            {
+                _records = records;
             }
         }
     }
