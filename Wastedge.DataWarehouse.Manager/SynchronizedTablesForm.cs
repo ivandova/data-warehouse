@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using SystemEx.Windows.Forms;
@@ -73,14 +74,57 @@ namespace Wastedge.DataWarehouse.Manager
             if (result != DialogResult.Yes)
                 return;
 
+            var tables = _available.SelectedItems.Cast<ListViewItem>().Select(p => p.Text).ToList();
+
             foreach (ListViewItem item in _available.SelectedItems)
             {
-                _connection.AddSynchronized(item.Text);
                 item.Remove();
                 _synchronized.Items.Add(item.Text);
             }
 
             _synchronized.Sort();
+
+            Exception exception = null;
+
+            using (var form = new AddingTablesForm())
+            {
+                form.Shown += (s, ea) =>
+                {
+                    ThreadPool.QueueUserWorkItem(p =>
+                    {
+                        try
+                        {
+                            foreach (var table in tables)
+                            {
+                                _connection.AddSynchronized(table);
+                            }
+
+                            _connection.MigrateSynchronizedSchema();
+
+                            form.BeginInvoke(new Action(form.Dispose));
+                        }
+                        catch (Exception ex)
+                        {
+                            exception = ex;
+                        }
+                    });
+                };
+
+                form.ShowDialog(this);
+            }
+
+            if (exception != null)
+            {
+                MessageBox.Show(
+                    this,
+                    "An error occured while adding the tables:" + Environment.NewLine +
+                    Environment.NewLine +
+                    exception.Message,
+                    Parent.FindForm().Text,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
         }
 
         private void _remove_Click(object sender, EventArgs e)

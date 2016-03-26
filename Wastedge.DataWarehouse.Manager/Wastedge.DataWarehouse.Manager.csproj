@@ -65,6 +65,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddingTablesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddingTablesForm.Designer.cs">
+      <DependentUpon>AddingTablesForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="InstanceControlAction.cs" />
     <Compile Include="InstanceControlForm.cs">
       <SubType>Form</SubType>
@@ -121,6 +127,9 @@
     </Compile>
     <Compile Include="Util\VS2012ColorTable.cs" />
     <Compile Include="Util\VS2012ToolStripRenderer.cs" />
+    <EmbeddedResource Include="AddingTablesForm.resx">
+      <DependentUpon>AddingTablesForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="EditInstanceForm.resx">
       <DependentUpon>EditInstanceForm.cs</DependentUpon>
     </EmbeddedResource>
