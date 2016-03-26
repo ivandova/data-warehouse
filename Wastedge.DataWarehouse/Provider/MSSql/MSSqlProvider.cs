@@ -9,12 +9,15 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using log4net;
 using WastedgeApi;
 
 namespace Wastedge.DataWarehouse.Provider.MSSql
 {
     internal class MSSqlProvider : IDataWarehouseProvider
     {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(MSSqlProvider));
+
         private readonly string _connectionString;
 
         public MSSqlProvider(string connectionString)
@@ -497,6 +500,8 @@ namespace Wastedge.DataWarehouse.Provider.MSSql
             }
             catch (Exception ex)
             {
+                Log.Error(ex);
+
                 logger.SetException(ex);
             }
             finally
