@@ -92,9 +92,19 @@ namespace Wastedge.DataWarehouse.Manager
                 _errorProvider.SetError(_trackedUpdateInterval, "Tracked update interval is required");
                 valid = false;
             }
+            else if (_trackedUpdateInterval.Value < 1)
+            {
+                _errorProvider.SetError(_trackedUpdateInterval, "Tracked update interval must be greater than zero");
+                valid = false;
+            }
             if (_untrackedUpdateInterval.Value == null)
             {
                 _errorProvider.SetError(_untrackedUpdateInterval, "Untracked update interval is required");
+                valid = false;
+            }
+            else if (_trackedUpdateInterval.Value < 1)
+            {
+                _errorProvider.SetError(_trackedUpdateInterval, "Untracked update interval must be greater than zero");
                 valid = false;
             }
 

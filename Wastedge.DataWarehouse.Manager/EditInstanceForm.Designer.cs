@@ -153,6 +153,7 @@
             this._untrackedUpdateInterval.NumberScale = 0;
             this._untrackedUpdateInterval.Size = new System.Drawing.Size(338, 20);
             this._untrackedUpdateInterval.TabIndex = 17;
+            this._toolTip.SetToolTip(this._untrackedUpdateInterval, "The interval in seconds to update tables that cannot be updated incrementally");
             // 
             // label8
             // 
@@ -164,7 +165,6 @@
             this.label8.TabIndex = 16;
             this.label8.Text = "Untracked update interval:";
             this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this._toolTip.SetToolTip(this.label8, "The interval in seconds to update tables that cannot be updated incrementally");
             // 
             // label7
             // 
@@ -176,7 +176,6 @@
             this.label7.TabIndex = 14;
             this.label7.Text = "Tracked update interval:";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this._toolTip.SetToolTip(this.label7, "The interval in seconds to update tables that can be updated incrementally");
             // 
             // _password
             // 
@@ -186,6 +185,7 @@
             this._password.Name = "_password";
             this._password.Size = new System.Drawing.Size(338, 20);
             this._password.TabIndex = 13;
+            this._toolTip.SetToolTip(this._password, "The password used to connect with Wastedge");
             this._password.UseSystemPasswordChar = true;
             // 
             // label6
@@ -198,7 +198,6 @@
             this.label6.TabIndex = 12;
             this.label6.Text = "Password:";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this._toolTip.SetToolTip(this.label6, "The password used to connect with Wastedge");
             // 
             // _username
             // 
@@ -208,6 +207,7 @@
             this._username.Name = "_username";
             this._username.Size = new System.Drawing.Size(338, 20);
             this._username.TabIndex = 11;
+            this._toolTip.SetToolTip(this._username, "The username used to connect with Wastedge");
             // 
             // label5
             // 
@@ -219,7 +219,6 @@
             this.label5.TabIndex = 10;
             this.label5.Text = "User name:";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this._toolTip.SetToolTip(this.label5, "The username used to connect with Wastedge");
             // 
             // _tenant
             // 
@@ -229,6 +228,7 @@
             this._tenant.Name = "_tenant";
             this._tenant.Size = new System.Drawing.Size(338, 20);
             this._tenant.TabIndex = 9;
+            this._toolTip.SetToolTip(this._tenant, "The tenant ID or company ID");
             // 
             // label4
             // 
@@ -240,7 +240,6 @@
             this.label4.TabIndex = 8;
             this.label4.Text = "Tenant:";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this._toolTip.SetToolTip(this.label4, "The tenant ID or company ID");
             // 
             // _url
             // 
@@ -250,6 +249,7 @@
             this._url.Name = "_url";
             this._url.Size = new System.Drawing.Size(338, 20);
             this._url.TabIndex = 7;
+            this._toolTip.SetToolTip(this._url, "The URL to Wastedge, e.g. http://www.wastedge.com");
             // 
             // label3
             // 
@@ -261,7 +261,6 @@
             this.label3.TabIndex = 6;
             this.label3.Text = "Wastedge URL:";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this._toolTip.SetToolTip(this.label3, "The URL to Wastedge, e.g. http://www.wastedge.com");
             // 
             // label1
             // 
@@ -273,7 +272,6 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "Provider:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this._toolTip.SetToolTip(this.label1, "The type of database to connect to");
             // 
             // _provider
             // 
@@ -286,6 +284,7 @@
             this._provider.Name = "_provider";
             this._provider.Size = new System.Drawing.Size(338, 21);
             this._provider.TabIndex = 3;
+            this._toolTip.SetToolTip(this._provider, "The type of database to connect to");
             // 
             // label2
             // 
@@ -307,6 +306,7 @@
             this._connectionString.Name = "_connectionString";
             this._connectionString.Size = new System.Drawing.Size(338, 110);
             this._connectionString.TabIndex = 5;
+            this._toolTip.SetToolTip(this._connectionString, "The connection string used to connect to the database");
             // 
             // _trackedUpdateInterval
             // 
@@ -317,6 +317,7 @@
             this._trackedUpdateInterval.NumberScale = 0;
             this._trackedUpdateInterval.Size = new System.Drawing.Size(338, 20);
             this._trackedUpdateInterval.TabIndex = 15;
+            this._toolTip.SetToolTip(this._trackedUpdateInterval, "The interval in seconds to update tables that can be updated incrementally");
             // 
             // _errorProvider
             // 
