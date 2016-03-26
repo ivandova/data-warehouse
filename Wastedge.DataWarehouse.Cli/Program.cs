@@ -3,34 +3,57 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NDesk.Options;
 using Wastedge.DataWarehouse.Provider.MSSql;
 using WastedgeApi;
 
 namespace Wastedge.DataWarehouse.Cli
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
-            var provider = (DataWarehouseProvider)Enum.Parse(typeof(DataWarehouseProvider), args[0], true);
+            try
+            {
+                var arguments = new Arguments(args);
 
-            var connection = new DataWarehouseConnection(
-                provider,
-                args[1],
-                new ApiCredentials(args[2], args[3], args[4], args[5])
-            );
+                var connection = new DataWarehouseConnection(
+                    arguments.Provider.Value,
+                    arguments.ConnectionString,
+                    new ApiCredentials(arguments.Url, arguments.Tenant, arguments.Username, arguments.Password)
+                    );
 
-            Console.WriteLine("Migrating database support tables");
+                Console.WriteLine("Migrating database support tables");
 
-            connection.MigrateSupportSchema();
+                connection.MigrateSupportSchema();
 
-            Console.WriteLine("Migrating synchronized schema");
+                Console.WriteLine("Migrating synchronized schema");
 
-            connection.MigrateSynchronizedSchema();
+                connection.MigrateSynchronizedSchema();
 
-            Console.WriteLine("Synchronizing tables");
+                Console.WriteLine("Synchronizing tables");
 
-            connection.Synchronize();
+                connection.Synchronize(arguments.Mode);
+
+                return 0;
+            }
+            catch (OptionException ex)
+            {
+                Console.WriteLine(ex.Message);
+
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unknown error: {ex.Message}");
+                if (ex.StackTrace != null)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine(ex.StackTrace);
+                }
+
+                return 2;
+            }
         }
     }
 }
