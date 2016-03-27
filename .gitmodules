@@ -1,4 +1,0 @@
-[submodule "WastedgeApi"]
-	path = WastedgeApi
-	url = http://vcs.gmt.nl/wastedge/weapi-net.git
-	branch = master

@@ -333,7 +333,7 @@ namespace Wastedge.DataWarehouse.Provider.MSSql
             if (!mode.HasFlag(schemaMode))
                 return;
 
-            var filters = new List<Filter>();
+            var query = api.CreateQuery(schema);
 
             if (schemaMode == SynchronizeMode.Tracked)
             {
@@ -353,8 +353,8 @@ namespace Wastedge.DataWarehouse.Provider.MSSql
                         {
                             var field = (EntityPhysicalField)schema.Members["update_timestamp"];
 
-                            filters.Add(new Filter(field, FilterType.GreaterThan, lastUpdate.Value));
-                            filters.Add(new Filter(field, FilterType.NotIsNull, null));
+                            query.Filters.Add(new Filter(field, FilterType.GreaterThan, lastUpdate.Value));
+                            query.Filters.Add(new Filter(field, FilterType.NotIsNull, null));
                         }
                     }
                 }
@@ -411,7 +411,7 @@ namespace Wastedge.DataWarehouse.Provider.MSSql
 
             try
             {
-                var resultSet = api.Query(schema, filters);
+                var resultSet = query.ExecuteReader();
 
                 while (resultSet.Next())
                 {
@@ -493,9 +493,12 @@ namespace Wastedge.DataWarehouse.Provider.MSSql
                     if (!resultSet.HasMore)
                         break;
 
+                    logger.End();
                     logger.Start();
 
-                    resultSet = resultSet.GetNext();
+                    query.Start = resultSet.NextResult;
+
+                    resultSet = query.ExecuteReader();
                 }
             }
             catch (Exception ex)

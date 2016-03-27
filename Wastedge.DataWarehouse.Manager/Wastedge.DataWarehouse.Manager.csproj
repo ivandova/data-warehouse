@@ -38,6 +38,10 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SourceGrid, Version=4.40.4580.29115, Culture=neutral, PublicKeyToken=df6f5e538749e85d, processorArchitecture=MSIL">
       <HintPath>..\packages\SourceGrid.4.4.0\lib\net35\SourceGrid.dll</HintPath>
       <Private>True</Private>
@@ -60,6 +64,10 @@
     </Reference>
     <Reference Include="ThemeVS2012Light, Version=2.9.0.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
       <HintPath>..\packages\DockPanelSuite.ThemeVS2012Light.2.10.0-beta2\lib\net40\ThemeVS2012Light.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="WastedgeApi, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WastedgeApi.1.3.0.0\lib\net45\WastedgeApi.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=2.9.0.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
@@ -178,10 +186,6 @@
     <ProjectReference Include="..\Wastedge.DataWarehouse\Wastedge.DataWarehouse.csproj">
       <Project>{0456960c-11df-42a2-9d66-abbd33cd77c2}</Project>
       <Name>Wastedge.DataWarehouse</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WastedgeApi\WastedgeApi\WastedgeApi.csproj">
-      <Project>{c6bd0c13-2385-48cc-a649-7ab79a14f8f2}</Project>
-      <Name>WastedgeApi</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
